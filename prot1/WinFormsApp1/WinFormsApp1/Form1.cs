@@ -5,11 +5,13 @@ namespace WinFormsApp1;
 
 public partial class Form1 : Form
 {
+    OperationForm form;
     public Form1()
     {
         InitializeComponent();
         pictureBox1.AllowDrop = true;
-        
+        form = new OperationForm(this);
+        form.Show();
     }
 
     
@@ -34,14 +36,14 @@ public partial class Form1 : Form
     }
 
     //ドラッグアンドドロップされたときにPDFを開く
-    
-    
+
+    int pageIndex = 0;
     private PdfiumViewer.PdfDocument doc;
     //PDFファイルを開く処理
     private void OpenPDF(string filename)
     {
         doc = PdfiumViewer.PdfDocument.Load(filename);
-        int pageIndex = 0;
+
         Image image = doc.Render(pageIndex, Width, Height, 96, 96, false);
         pictureBox1.Image = image;
     }
@@ -64,6 +66,38 @@ public partial class Form1 : Form
         if (e.Data.GetDataPresent(DataFormats.FileDrop))
         {
             e.Effect = DragDropEffects.Move;
+        }
+    }
+
+    private void pictureBox1_MouseClick(object sender, MouseEventArgs e)
+    {
+        //右クリックされたらOperationFormを再表示する
+        if (e.Button == MouseButtons.Right)
+        {
+            form.Show();
+        }
+
+    }
+    
+    public void Next()
+    {
+        //PDFを次のページに移動する。
+        if (pageIndex < doc.PageCount - 1)
+        {
+            pageIndex++;
+            Image image = doc.Render(pageIndex, Width, Height, 96, 96, false);
+            pictureBox1.Image = image;
+        }
+
+    }
+    public void Back()
+    {
+        //PDFを前のページに移動する。
+        if (pageIndex > 0)
+        {
+            pageIndex--;
+            Image image = doc.Render(pageIndex, Width, Height, 96, 96, false);
+            pictureBox1.Image = image;
         }
     }
 }
