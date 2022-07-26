@@ -16,7 +16,7 @@ public partial class Form1 : Form
     private Point mousePoint;
     private void pictureBox1_MouseDown(object sender, MouseEventArgs e)
     {
-        //左ボタンが押されたときにマウスポイントを保持する。
+        //左クリックされたときにマウスポイントを保持する。
         if ((e.Button & MouseButtons.Left) == MouseButtons.Left)
         {
             mousePoint = e.Location;
@@ -25,7 +25,7 @@ public partial class Form1 : Form
 
     private void pictureBox1_MouseMove(object sender, MouseEventArgs e)
     {
-        //左ボタンが押されたときに保持している量との差分をウインドウの移動量とする
+        //左クリックされたときに保持している量との差分をウインドウの移動量とする
         if ((e.Button & MouseButtons.Left) == MouseButtons.Left)
         {
             this.Left += e.X - mousePoint.X;
