@@ -5,28 +5,40 @@ namespace WinFormsApp1;
 
 public partial class Form1 : Form
 {
-    OperationForm form;
+    private readonly OperationForm form;
     public Form1()
     {
         InitializeComponent();
         pictureBox1.AllowDrop = true;
         form = new OperationForm(this);
         form.Show();
+        
+        this.MouseWheel += Form1_MouseWheel;
     }
 
-
-
+    
+    private Point mousePoint;
+    private void Form1_MouseWheel(object? sender, MouseEventArgs e)
+    {
+        //マウスホイールでpageIndexを移動する
+        if (sender == null) return;
+        if(e.Delta < 0)
+        {
+            Next();
+        }
+        else
+        {
+            Back();
+        }
+    }
 
     private void pictureBox1_MouseDown(object sender, MouseEventArgs e)
     {
         TitleBarClick.DoNclButtonDown(this.Handle);
-    
-
+   
     }
 
-
-
-    int pageIndex = 0;
+    private int pageIndex = 0;
     private PdfiumViewer.PdfDocument doc;
     //PDFファイルを開く処理
     private void OpenPDF(string filename)
@@ -83,8 +95,17 @@ public partial class Form1 : Form
     }
     private void Render()
     {
-        Image image = doc.Render(pageIndex, Width, Height, 96, 96, false);
+        if(doc == null)
+        {
+            return;
+        }
+        Image image = doc.Render(pageIndex,pictureBox1. Width,pictureBox1. Height, 96, 96, false);
+        var backImage = pictureBox1.Image;
         pictureBox1.Image = image;
+        if (backImage != null)
+        {
+            backImage.Dispose();
+        }
     }            
     public void Back()
     {
@@ -98,5 +119,10 @@ public partial class Form1 : Form
             pageIndex--;
             Render();
         }
+    }
+
+    private void pictureBox1_Resize(object sender, EventArgs e)
+    {
+        Render();
     }
 }
