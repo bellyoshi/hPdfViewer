@@ -14,28 +14,17 @@ public partial class Form1 : Form
         form.Show();
     }
 
-    
-    private Point mousePoint;
+
+
+
     private void pictureBox1_MouseDown(object sender, MouseEventArgs e)
     {
-        //左クリックされたときにマウスポイントを保持する。
-        if ((e.Button & MouseButtons.Left) == MouseButtons.Left)
-        {
-            mousePoint = e.Location;
-        }
+        TitleBarClick.DoNclButtonDown(this.Handle);
+    
+
     }
 
-    private void pictureBox1_MouseMove(object sender, MouseEventArgs e)
-    {
-        //左クリックされたときに保持している量との差分をウインドウの移動量とする
-        if ((e.Button & MouseButtons.Left) == MouseButtons.Left)
-        {
-            this.Left += e.X - mousePoint.X;
-            this.Top += e.Y - mousePoint.Y;
-        }
-    }
 
-    //ドラッグアンドドロップされたときにPDFを開く
 
     int pageIndex = 0;
     private PdfiumViewer.PdfDocument doc;
@@ -43,9 +32,8 @@ public partial class Form1 : Form
     private void OpenPDF(string filename)
     {
         doc = PdfiumViewer.PdfDocument.Load(filename);
-
-        Image image = doc.Render(pageIndex, Width, Height, 96, 96, false);
-        pictureBox1.Image = image;
+        pageIndex = 0;
+        Render();
     }
 
     private void pictureBox1_DragDrop(object sender, DragEventArgs e)
@@ -81,23 +69,34 @@ public partial class Form1 : Form
     
     public void Next()
     {
+        if (doc == null)
+        {
+            return;
+        }
         //PDFを次のページに移動する。
         if (pageIndex < doc.PageCount - 1)
         {
             pageIndex++;
-            Image image = doc.Render(pageIndex, Width, Height, 96, 96, false);
-            pictureBox1.Image = image;
+            Render();
         }
 
     }
+    private void Render()
+    {
+        Image image = doc.Render(pageIndex, Width, Height, 96, 96, false);
+        pictureBox1.Image = image;
+    }            
     public void Back()
     {
+        if(doc == null)
+        {
+            return;
+        }
         //PDFを前のページに移動する。
         if (pageIndex > 0)
         {
             pageIndex--;
-            Image image = doc.Render(pageIndex, Width, Height, 96, 96, false);
-            pictureBox1.Image = image;
+            Render();
         }
     }
 }
