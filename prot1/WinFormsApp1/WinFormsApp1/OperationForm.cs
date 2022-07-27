@@ -33,12 +33,12 @@ namespace WinFormsApp1
 
         private void button2_Click(object sender, EventArgs e)
         {
-            form1.Next();
+            WorkPDF.ThisWorkPDF.Next();
         }
 
         private void button3_Click(object sender, EventArgs e)
         {
-            form1.Back();
+            WorkPDF.ThisWorkPDF.Back();
         }
     }
 }
