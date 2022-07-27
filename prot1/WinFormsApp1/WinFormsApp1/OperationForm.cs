@@ -12,18 +12,18 @@ namespace WinFormsApp1
 {
     public partial class OperationForm : Form
     {
-        private Form1 form1;
+        private ViewerForm viewerForm;
         
-        public OperationForm(Form1 form1)
+        public OperationForm(ViewerForm form1)
         {
-            this.form1 = form1;
+            this.viewerForm = form1;
             InitializeComponent();
             
         }
 
         private void OperationForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            form1.Close();
+            viewerForm.Close();
         }
 
         private void button1_Click(object sender, EventArgs e)

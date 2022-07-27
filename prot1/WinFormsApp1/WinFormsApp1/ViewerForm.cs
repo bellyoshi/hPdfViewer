@@ -3,10 +3,10 @@ using PdfiumViewer;
 namespace WinFormsApp1;
 
 
-public partial class Form1 : Form , IDisplay
+public partial class ViewerForm : Form , IDisplay
 {
     private readonly OperationForm form;
-    public Form1()
+    public ViewerForm()
     {
         InitializeComponent();
         pictureBox1.AllowDrop = true;
@@ -15,9 +15,13 @@ public partial class Form1 : Form , IDisplay
         
         this.MouseWheel += Form1_MouseWheel;
         workPDF.SetDisplay(this);
+        
+        CommandLine.GetFileAndOpen();
     }
 
-    
+
+
+
     private void Form1_MouseWheel(object? sender, MouseEventArgs e)
     {
         //マウスホイールでpageIndexを移動する
@@ -46,6 +50,7 @@ public partial class Form1 : Form , IDisplay
     private void pictureBox1_DragDrop(object sender, DragEventArgs e)
     {
         //DropされたPDFファイルを開く
+        if (e.Data == null) return;
         if (e.Data.GetDataPresent(DataFormats.FileDrop))
         {
             string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
