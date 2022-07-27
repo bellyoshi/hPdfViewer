@@ -47,6 +47,9 @@ public partial class ViewerForm : Form , IDisplay
 
     public Image Image { get => pictureBox1.Image ; set => pictureBox1.Image = value ; }
 
+    public Size DisplaySize { get => pictureBox1.Size; }
+
+
     private void pictureBox1_DragDrop(object sender, DragEventArgs e)
     {
         //DropされたPDFファイルを開く

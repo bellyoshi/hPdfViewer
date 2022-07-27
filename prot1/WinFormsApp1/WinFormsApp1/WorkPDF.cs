@@ -66,13 +66,48 @@ namespace WinFormsApp1
             {
                 return;
             }
-            Image image = doc.Render(pageIndex, display.Width, display.Height, 96, 96, false);
+            var size = GetRenderSize();
+            Image image = doc.Render(pageIndex, size.Width, size.Height, 96, 96, false);
             var backImage = display.Image;
             display.Image = image;
             if (backImage != null)
             {
                 backImage.Dispose();
             }
+        }
+        
+        private Size GetRenderSize()
+        {
+            if(doc == null)
+            {
+                return new Size(0, 0);
+            }
+            if (display == null)
+            {
+                return new Size(0, 0);
+            }
+            var pdfSize = doc.PageSizes[pageIndex];
+            var bound = display.DisplaySize;
+            if (bound.Width == 0 || bound.Height == 0)
+            {
+                return new Size(0,0);
+            }
+
+            var pdfWdivH = (double)pdfSize.Width / pdfSize.Height;
+            var boxWdivH = (double)bound.Width / bound.Height;
+            if (boxWdivH > 10)
+            {
+                return new Size(0,0);
+            }
+            if (pdfWdivH<boxWdivH)
+            {
+                return new Size((int)(bound.Height* pdfWdivH), bound.Height);
+            }
+            else
+            {
+                return  new Size(bound.Width, (int)(bound.Width / pdfWdivH));
+            }
+
         }
         public void Repaint()
         {
@@ -82,7 +117,7 @@ namespace WinFormsApp1
     
     public interface IDisplay {
         Image Image { get; set; }
-        int Width { get; }
-        int Height { get; }
+        Size DisplaySize { get; }
+        
     }
 }

@@ -1,6 +1,5 @@
-//todo リンクファイルが開けるようん
-//引数
-//オリジナルサイズに縦横比合わせる。
+//todo リンクファイルが開けるようにする
+//Ctrl + マウススクロールで拡大、縮小
 namespace WinFormsApp1
 {
     internal static class Program
