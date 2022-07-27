@@ -85,8 +85,23 @@ public partial class ViewerForm : Form , IDisplay
         }
 
     }
+
+    bool requireRepaint = false;
     private void pictureBox1_Resize(object sender, EventArgs e)
     {
-        workPDF.Repaint();
+        timer1.Start();
+        requireRepaint = true;
+    }
+
+    private void timer1_Tick(object sender, EventArgs e)
+    {
+        if (requireRepaint)
+        {
+            workPDF.Repaint();
+            
+
+            requireRepaint = false;
+        }
+        timer1.Stop();
     }
 }

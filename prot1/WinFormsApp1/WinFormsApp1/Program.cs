@@ -2,6 +2,8 @@
 //todo Ctrl + マウススクロールで拡大、縮小
 //todo ファイルメニューの作成
 //todo アプリを閉じるボタン
+//todo 前回起動時のファイルを再読み込み
+//todo 前回の読んでいるページ位置の保存
 namespace WinFormsApp1
 {
     internal static class Program
