@@ -1,5 +1,7 @@
 //todo リンクファイルが開けるようにする
-//Ctrl + マウススクロールで拡大、縮小
+//todo Ctrl + マウススクロールで拡大、縮小
+//todo ファイルメニューの作成
+//todo アプリを閉じるボタン
 namespace WinFormsApp1
 {
     internal static class Program
