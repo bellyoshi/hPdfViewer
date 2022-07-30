@@ -66,6 +66,13 @@ namespace WinFormsApp1
             {
                 return;
             }
+            RenderImage();
+            SetMaxSize();
+        }
+
+        private void RenderImage()
+        {
+            System.Diagnostics.Debug.Assert(display != null);
             var size = GetRenderSize();
             Image image = doc.Render(pageIndex, size.Width, size.Height, 96, 96, false);
             var backImage = display.Image;
@@ -75,7 +82,41 @@ namespace WinFormsApp1
                 backImage.Dispose();
             }
         }
-        
+
+        void SetMaxSize()
+        {
+            System.Diagnostics.Debug.Assert(display != null);
+            var pdfSize = doc.PageSizes[pageIndex];
+            var screen = display.GetScreen();
+            var screenSize = screen.Bounds.Size;
+            var size = GetSize(pdfSize, screenSize);
+            display.SetMaxSize(size);
+        }
+
+        private Size GetSize(SizeF pdfSize, Size bound)
+        {
+
+            if (bound.Width == 0 || bound.Height == 0)
+            {
+                return new Size(0, 0);
+            }
+
+            var pdfWdivH = (double)pdfSize.Width / pdfSize.Height;
+            var boxWdivH = (double)bound.Width / bound.Height;
+            if (boxWdivH > 10)
+            {
+                return new Size(0, 0);
+            }
+            if (pdfWdivH<boxWdivH)
+            {
+                return new Size((int)(bound.Height* pdfWdivH), bound.Height);
+            }
+            else
+            {
+                return new Size(bound.Width, (int)(bound.Width / pdfWdivH));
+            }
+
+        }
         private Size GetRenderSize()
         {
             if(doc == null)
@@ -88,26 +129,7 @@ namespace WinFormsApp1
             }
             var pdfSize = doc.PageSizes[pageIndex];
             var bound = display.DisplaySize;
-            if (bound.Width == 0 || bound.Height == 0)
-            {
-                return new Size(0,0);
-            }
-
-            var pdfWdivH = (double)pdfSize.Width / pdfSize.Height;
-            var boxWdivH = (double)bound.Width / bound.Height;
-            if (boxWdivH > 10)
-            {
-                return new Size(0,0);
-            }
-            if (pdfWdivH<boxWdivH)
-            {
-                return new Size((int)(bound.Height* pdfWdivH), bound.Height);
-            }
-            else
-            {
-                return  new Size(bound.Width, (int)(bound.Width / pdfWdivH));
-            }
-
+            return GetSize(pdfSize, bound);
         }
         public void Repaint()
         {
@@ -115,9 +137,5 @@ namespace WinFormsApp1
         }
     }
     
-    public interface IDisplay {
-        Image Image { get; set; }
-        Size DisplaySize { get; }
-        
-    }
+
 }

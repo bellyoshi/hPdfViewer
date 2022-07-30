@@ -20,7 +20,10 @@ public partial class ViewerForm : Form , IDisplay
     }
 
 
-
+    public Screen GetScreen()
+    {
+        return Screen.FromControl(this);
+    }
 
     private void Form1_MouseWheel(object? sender, MouseEventArgs e)
     {
@@ -104,4 +107,11 @@ public partial class ViewerForm : Form , IDisplay
         }
         timer1.Stop();
     }
+
+    public void SetMaxSize(Size size)
+    {
+        this.MaximumSize = size;
+    } 
+
+
 }
